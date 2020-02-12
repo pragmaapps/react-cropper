@@ -52,7 +52,7 @@ class ReactCropper extends Component {
       .filter(propKey => optionProps.indexOf(propKey) !== -1)
       .reduce((prevOptions, propKey) =>
         Object.assign({}, prevOptions, { [propKey]: this.props[propKey] }), {});
-    this.cropper = new Cropper(this.img, options);
+    this.cropper = new Cropper(this.canvas, options);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -116,10 +116,10 @@ class ReactCropper extends Component {
   }
 
   componentWillUnmount() {
-    if (this.img) {
+    if (this.canvas) {
       // Destroy the cropper, this makes sure events such as resize are cleaned up and do not leak
       this.cropper.destroy();
-      delete this.img;
+      delete this.canvas;
       delete this.cropper;
     }
   }
@@ -230,9 +230,6 @@ class ReactCropper extends Component {
 
   render() {
     const {
-      src,
-      alt,
-      crossOrigin,
       style,
       className,
     } = this.props;
@@ -242,11 +239,8 @@ class ReactCropper extends Component {
         style={style}
         className={className}
       >
-        <img
-          crossOrigin={crossOrigin}
-          ref={(img) => { this.img = img; }}
-          src={src}
-          alt={alt === undefined ? 'picture' : alt}
+        <canvas
+          ref={(img) => { this.canvas = img; }}
           style={{ opacity: 0 }}
         />
       </div>
